@@ -1,5 +1,5 @@
 # openinstall-cocos-plugin
-cocos creator 集成 openinstall SDK  
+Cocos Creator 3.x 集成 openinstall SDK  
 
 ## Android 集成
 
@@ -46,7 +46,7 @@ OpenInstallPlugin.init();
             + ", bindData=" + appData.bindData);
     }
     //在 App 业务需要时调用
-    OpenInstallPlugin.getInstall(10, this._installCallback);
+    OpenInstallPlugin.getInstall(this._installCallback);
 ```
 > **注意：**    
 > 1. 安装参数尽量不要自己保存，在每次需要用到的时候调用该方法去获取，因为如果获取成功sdk会保存在本地  

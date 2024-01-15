@@ -34,7 +34,7 @@ export class OpenInstallPlugin {
         }
     }
 
-    public static getInstall(s: number, callback: Function) {
+    public static getInstall(callback: Function, s: number = 10) {
         this.installCallback = callback;
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "getInstall", "(I)V", s);
@@ -43,7 +43,7 @@ export class OpenInstallPlugin {
         }
     }
 
-    public static getInstallCanRetry(s: number, callback: Function) {
+    public static getInstallCanRetry(callback: Function, s: number = 5) {
         this.installCallback = callback;
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "getInstallCanRetry", "(I)V", s);
@@ -69,7 +69,7 @@ export class OpenInstallPlugin {
         }
     }
 
-    public static reportEffectPoint(pointId: string, pointValue: number, extraParam: Object) {
+    public static reportEffectPoint(pointId: string, pointValue: number, extraParam?: Object) {
         if (sys.OS.ANDROID == sys.os) {
             var jsonStr = "{}";
             if (extraParam) {
