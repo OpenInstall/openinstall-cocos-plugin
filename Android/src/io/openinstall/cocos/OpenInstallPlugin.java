@@ -1,6 +1,8 @@
 package io.openinstall.cocos;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.cocos.lib.CocosHelper;
@@ -36,6 +38,15 @@ public class OpenInstallPlugin {
     private final static String CALLBACK_WAKEUP = "_wakeupCallback";
     private final static String CALLBACK_SHARE = "_shareCallback";
 
+    private static Handler uiHandler = new Handler(Looper.getMainLooper());
+    private static void runOnUiThread(Runnable action) {
+        if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
+            uiHandler.post(action);
+        } else {
+            action.run();
+        }
+    }
+
     private static boolean hasTrue(JSONObject jsonObject, String key) {
         if (jsonObject.has(key)) {
             return jsonObject.optBoolean(key, false);
@@ -45,17 +56,17 @@ public class OpenInstallPlugin {
 
     public static void preInit() {
         Log.d(TAG, "preInit");
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                OpenInstall.preInit(GlobalObject.getContext());
+                OpenInstall.preInit(GlobalObject.getActivity());
             }
         });
     }
 
     public static void config(final String jsonStr) {
         Log.d(TAG, "config jsonStr=" + jsonStr);
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -106,7 +117,7 @@ public class OpenInstallPlugin {
     }
 
     public static void init() {
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 OpenInstall.init(GlobalObject.getActivity(), configuration);
@@ -124,7 +135,7 @@ public class OpenInstallPlugin {
     }
 
     public static void getInstall(final int s) {
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 OpenInstall.getInstall(new AppInstallListener() {
@@ -142,7 +153,7 @@ public class OpenInstallPlugin {
 
     @Deprecated
     public static void getInstallCanRetry(final int s) {
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 OpenInstall.getInstallCanRetry(new AppInstallRetryAdapter() {
@@ -164,7 +175,7 @@ public class OpenInstallPlugin {
     }
 
     public static void registerWakeup() {
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "registerWakeup");
@@ -211,7 +222,7 @@ public class OpenInstallPlugin {
     }
 
     public static void reportRegister() {
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 OpenInstall.reportRegister();
@@ -222,7 +233,7 @@ public class OpenInstallPlugin {
     // js 那边函数签名不能设置为 J -> long ，所以修改为 I -> int
     public static void reportEffectPoint(final String pointId, final int pointValue, final String extraJson) {
         Log.d(TAG, "reportEffectPoint " + extraJson);
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> extraMap = new HashMap<>();
@@ -246,7 +257,7 @@ public class OpenInstallPlugin {
     }
 
     public static void reportShare(final String shareCode, final String sharePlatform) {
-        GlobalObject.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 OpenInstall.reportShare(shareCode, sharePlatform, new ResultCallback<Void>() {

@@ -72,6 +72,14 @@
 ```
 > 不采用使用 `OpenInstallActivity` 的方式时，可以将 `OpenInstallActivity` 中的相关代码拷贝到 `AppActivity` 中；开发者升级时，也需要对照 `OpenInstallActivity` 的修改对 `AppActivity` 做相应的修改。
 
+#### 混淆配置
+由于是基于反射机制实现 JavaScript 与 Android 系统原生通信，因此需要在 Android 工程中进行混淆配置。   
+修改项目的 `app/proguard-rules.pro` 文件，在后面添加下面配置
+```
+-keep public class io.openinstall.cocos.** { *; }
+-dontwarn io.openinstall.cocos.**
+```
+
 ## 其它
 
 #### 预初始化
@@ -109,22 +117,3 @@ OpenInstallPlugin.preInit()
 
 对于上表中的设备信息，如果不想SDK获取也不想传入，请传入**空字符串**，不要传入固定无意义的非空字符串
 
-#### 效果点明细上报
-在 openinstall 控制台 的 “效果点管理” 中添加对应的效果点，并启用“记录明细”，添加自定义参数
-``` js
-    var extra = {
-        x : "123",
-        y : "abc"
-    }
-    OpenInstallPlugin.reportEffectPoint("effect_detail", 1, extra);
-```
-
-#### 分享统计
-分享上报主要是统计某个具体用户在某次分享中，分享给了哪个平台，再通过JS端绑定被分享的用户信息，进一步统计到被分享用户的激活回流等情况。
-``` lua
-    _shareCallback(result){
-        console.info("reportShare：shouldRetry=" + result.shouldRetry);
-    }
-    OpenInstallPlugin.reportShare("cc0011", "QQ", _shareCallback)
-```
-第一个参数是分享ID，第二个参数是分享平台。分享平台请参考 openinstall 官网文档

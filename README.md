@@ -70,6 +70,27 @@ OpenInstallPlugin.reportRegister();
 OpenInstallPlugin.reportEffectPoint("effect_test", 1);
 ```
 
+#### 4.3 效果点明细上报
+在 openinstall 控制台 的 “效果点管理” 中添加对应的效果点，并启用“记录明细”，添加自定义参数
+``` js
+    var extra = {
+        x : "123",
+        y : "abc"
+    }
+    OpenInstallPlugin.reportEffectPoint("effect_detail", 1, extra);
+```
+
+### 5 分享统计
+分享上报主要是统计某个具体用户在某次分享中，分享给了哪个平台，再通过JS端绑定被分享的用户信息，进一步统计到被分享用户的激活回流等情况。
+``` lua
+    _shareCallback(result){
+        console.info("reportShare：shouldRetry=" + result.shouldRetry);
+    }
+    OpenInstallPlugin.reportShare("cc0011", "QQ", _shareCallback)
+```
+第一个参数是分享ID，第二个参数是分享平台。分享平台请参考 openinstall 官网文档
+
+
 ## 导出apk/ipa包并上传
 代码集成完毕后，需要导出安装包上传openinstall后台，openinstall会自动完成所有的应用配置工作。  
 ![上传安装包](https://res.cdn.openinstall.io/doc/upload-ipa-jump.png)
