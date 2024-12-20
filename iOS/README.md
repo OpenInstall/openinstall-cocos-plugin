@@ -95,15 +95,18 @@
 
 ### 广告平台渠道和ASA渠道配置
 
-广告idfa权限配置：
+1)、需要导入系统库：  
+苹果新隐私政策：AppTrackingTransparency.framework  
+广告相关库：AdSupport.framework  
+ASA相关库：AdSupport.framework
 
-1）、需要在Info.plist文件中配置权限  
+2）、广告idfa权限配置：需要在Info.plist文件中配置权限  
 ``` xml
 <key>NSUserTrackingUsageDescription</key>
 <string>为了您可以精准获取到优质推荐内容，需要您允许使用该权限</string>
 ```
 
-2）、添加获取idfa和ASA的的代码
+3）、添加获取idfa和ASA的的代码
 ``` xml
     let configIosOptions = {
             adEnable: true,//必要，是否开启广告平台统计功能
