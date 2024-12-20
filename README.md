@@ -6,7 +6,8 @@ Cocos Creator 3.x 集成 openinstall SDK
 请参考 [Android 集成指南](Android/README.md)
 
 ## iOS 集成
-正在开发中...
+
+请参考 [Android 集成指南](iOS/README.md)
 
 ## 使用指南  
 
@@ -71,7 +72,7 @@ OpenInstallPlugin.reportEffectPoint("effect_test", 1);
 ```
 
 #### 4.3 效果点明细上报
-在 openinstall 控制台 的 “效果点管理” 中添加对应的效果点，并启用“记录明细”，添加自定义参数
+在 openinstall 控制台 的 “效果点管理” 中添加对应的效果点，并启用“记录明细”，添加自定义参数，自定义参数格式只能是字符串
 ``` js
     var extra = {
         x : "123",

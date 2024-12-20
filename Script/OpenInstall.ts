@@ -2,6 +2,8 @@
 import { native, sys } from 'cc';
 
 const java_class_name = "io/openinstall/cocos/OpenInstallPlugin";
+const iOS_class_bridge = "IOSOpenInstallBridge";
+const iOS_class_init = "Openinstall";
 
 export class OpenInstallPlugin {
 
@@ -26,24 +28,33 @@ export class OpenInstallPlugin {
         }
     }
 
+    public static configIOS(options: Object) {
+        if (sys.OS.IOS == sys.os) {
+            var jsonStr = JSON.stringify(options);
+            native.reflection.callStaticMethod(iOS_class_init, "config:", jsonStr);
+        } else {
+            console.info("此方法仅适用于iOS平台");
+        }
+    }
+
     public static init() {
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "init", "()V");
         } else {
-            console.info("此方法仅适用于Android平台");
+            native.reflection.callStaticMethod(iOS_class_init,"init");
         }
     }
 
-    public static getInstall(callback: Function, s: number = 10) {
+    public static getInstall(s: number, callback: Function) {
         this.installCallback = callback;
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "getInstall", "(I)V", s);
         } else {
-            console.info("此方法仅适用于Android平台");
+            native.reflection.callStaticMethod(iOS_class_bridge, "getInstall");
         }
     }
 
-    public static getInstallCanRetry(callback: Function, s: number = 5) {
+    public static getInstallCanRetry(s: number, callback: Function) {
         this.installCallback = callback;
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "getInstallCanRetry", "(I)V", s);
@@ -57,7 +68,7 @@ export class OpenInstallPlugin {
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "registerWakeup", "()V");
         } else {
-            console.info("此方法仅适用于Android平台");
+            native.reflection.callStaticMethod(iOS_class_bridge, "registerWakeup");
         }
     }
 
@@ -65,11 +76,11 @@ export class OpenInstallPlugin {
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "reportRegister", "()V");
         } else {
-            console.info("此方法仅适用于Android平台");
+            native.reflection.callStaticMethod(iOS_class_bridge, "reportRegister");
         }
     }
 
-    public static reportEffectPoint(pointId: string, pointValue: number, extraParam?: Object) {
+    public static reportEffectPoint(pointId: string, pointValue: number, extraParam: Object) {
         if (sys.OS.ANDROID == sys.os) {
             var jsonStr = "{}";
             if (extraParam) {
@@ -77,7 +88,11 @@ export class OpenInstallPlugin {
             }
             native.reflection.callStaticMethod(java_class_name, "reportEffectPoint", "(Ljava/lang/String;ILjava/lang/String;)V", pointId, pointValue, jsonStr);
         } else {
-            console.info("此方法仅适用于Android平台");
+            var jsonStr = "{}";
+            if (extraParam) {
+                jsonStr = JSON.stringify(extraParam);
+            }
+            native.reflection.callStaticMethod(iOS_class_bridge, "reportEffectPoint:Value:effectDictionary:", pointId, pointValue, jsonStr);
         }
     }
 
@@ -86,7 +101,7 @@ export class OpenInstallPlugin {
         if (sys.OS.ANDROID == sys.os) {
             native.reflection.callStaticMethod(java_class_name, "reportShare", "(Ljava/lang/String;Ljava/lang/String;)V", shareCode, sharePlatform);
         } else {
-            console.info("此方法仅适用于Android平台");
+            native.reflection.callStaticMethod(iOS_class_bridge, "reportShare:sharePlatform:", shareCode, sharePlatform);
         }
     }
 
